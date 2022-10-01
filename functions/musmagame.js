@@ -136,7 +136,7 @@ async function musmaGame(interaction) {
       playerList += `\`${playerNum++}번 선수\` : <@${tmp[0]}>\n`;
     }
     await interaction.reply(
-      `티켓 판매가 시작되었습니다.\n\`/bugmusma buy_ticket\` 명령어로 티켓을 구매할 수 있습니다.\n\n\`\`========== 선수명단 ==========\`\`\n\n${playerList}`
+      `티켓 판매가 시작되었습니다.\n\`/벅머 구매\` 명령어로 티켓을 구매할 수 있습니다.\n\n\`\`========== 선수명단 ==========\`\`\n\n${playerList}`
     );
     canBuyTicket = true;
   }
@@ -220,7 +220,14 @@ async function musmaGame(interaction) {
       });
       return;
     }
+
     await interaction.deferReply();
+
+    const beforeBetBalance = await bankManager.getBalance(interaction.user.id);
+    if (betAmount > beforeBetBalance.point.current) {
+      await interaction.editReply(`잔고가 부족합니다!`);
+      return;
+    }
 
     //ticket buy function
     // bank deposit
@@ -317,11 +324,13 @@ async function musmaGame(interaction) {
       }
     }
     const receiver = admin.나트리움;
-    const fee = Math.floor((totalBetAmount * FEE_PERCENT) / 100);
-    // // console.log(totalBetAmount);
-    // console.log(fee);
-    await bankManager.withdrawBTC(receiver, String(fee));
-    console.log(`수수료 ${fee}BTC가 ${receiver} 에게 입급되었습니다.`);
+    const receiver2 = admin.목조;
+    const fee1 = Math.floor((totalBetAmount * 3) / 100);
+    const fee2 = Math.floor((totalBetAmount * 7) / 100);
+    await bankManager.withdrawBTC(receiver, String(fee1)); // 나트리움한테 3%
+    await bankManager.withdrawBTC(receiver2, String(fee2)); // 목조한테 7%
+    console.log(`수수료 ${fee1}BTC가 ${receiver} 에게 입급되었습니다.`);
+    console.log(`수수료 ${fee2}BTC가 ${receiver2} 에게 입급되었습니다.`);
     resetData();
     console.log(`선수명단이 초기화 되었습니다.`);
     await interaction.editReply(msg);
