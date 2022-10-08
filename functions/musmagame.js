@@ -30,7 +30,7 @@ const admin = {
 
 function resetData() {
   // players = [];
-  canRegisterPlayer = true;
+  // canRegisterPlayer = true;
   canBuyTicket = false;
   totalBetAmount = 0;
   ticketBuyers = [];
@@ -39,6 +39,7 @@ function resetData() {
 
 function resetPlayerList() {
   players = [];
+  canRegisterPlayer = true;
 }
 
 /////////--------==-=-=-=-=-=-=-=-=-=-=-=-=-=-=function=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
