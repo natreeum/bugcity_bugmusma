@@ -37,7 +37,7 @@ async function resetData() {
   mulRate = [];
 }
 
-/////////--------==-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+/////////--------==-=-=-=-=-=-=-=-=-=-=-=-=-=-=function=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 async function musmaGame(interaction) {
   //선수등록
   if (interaction.options.getSubcommand() === "선수등록") {
@@ -96,13 +96,30 @@ async function musmaGame(interaction) {
       });
       return;
     }
-    let playerList = "버그머스마 선수명단\n\n";
-    let playerNum = 1;
+    // let playerList = "버그머스마 선수명단\n\n";
+    // let playerNum = 1;
+    // for (let i of players) {
+    //   let tmp = Object.keys(i);
+    //   playerList += `\`${playerNum++}번 선수\` : <@${tmp[0]}>\n`;
+    // }
+    let msg = `총 티켓 판매금액(수수료 제외) : \`${totalBetAmountAfterFee} BTC\`\n\n`;
+    mulRate = [];
     for (let i of players) {
-      let tmp = Object.keys(i);
-      playerList += `\`${playerNum++}번 선수\` : <@${tmp[0]}>\n`;
+      let tmpMsg = "";
+      //key : 선수 id
+      let key = Object.keys(i)[0];
+      //amount : 베팅금액
+      let amount = i[key] === 0 ? 1 : i[key];
+      mulRate.push(Math.floor((totalBetAmountAfterFee / amount) * 100) / 100);
+      tmpMsg += `<@${key}>\n\`${
+        players.indexOf(i) + 1
+      }번 선수\` 승리 시 베팅금액의 **x${
+        mulRate[players.indexOf(i)]
+      }**지급\n\n`;
+      msg += tmpMsg;
+      await interaction.reply(msg);
     }
-    await interaction.reply(playerList);
+    // else await interaction.reply(playerList);
   }
 
   //ticket판매시작
