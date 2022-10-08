@@ -117,8 +117,8 @@ async function musmaGame(interaction) {
         mulRate[players.indexOf(i)]
       }**지급\n\n`;
       msg += tmpMsg;
-      await interaction.reply(msg);
     }
+    await interaction.reply(msg);
     // else await interaction.reply(playerList);
   }
 
