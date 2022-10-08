@@ -28,13 +28,17 @@ const admin = {
   목조: "901812980944097300",
 };
 
-async function resetData() {
-  players = [];
+function resetData() {
+  // players = [];
   canRegisterPlayer = true;
   canBuyTicket = false;
   totalBetAmount = 0;
   ticketBuyers = [];
   mulRate = [];
+}
+
+function resetPlayerList() {
+  players = [];
 }
 
 /////////--------==-=-=-=-=-=-=-=-=-=-=-=-=-=-=function=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -80,7 +84,8 @@ async function musmaGame(interaction) {
       });
       return;
     }
-    await resetData();
+    resetData();
+    resetPlayerList();
     await interaction.reply({
       content: `게임데이터가 리셋되었습니다.`,
       ephemeral: true,
