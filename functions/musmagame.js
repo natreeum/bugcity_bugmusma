@@ -32,11 +32,14 @@ function resetData() {
   // players = [];
   // canRegisterPlayer = true;
   canBuyTicket = false;
+  totalBetAmountAfterFee = 0;
   totalBetAmount = 0;
   ticketBuyers = [];
   mulRate = [];
+
   for (let i of players) {
-    i.amount = 0;
+    const key = Object.keys(i)[0];
+    i[key] = 0;
   }
 }
 
@@ -259,7 +262,6 @@ async function musmaGame(interaction) {
     // bank deposit
     await bankManager.depositBTC(interaction.user.id, String(betAmount));
     const balance = await bankManager.getBalance(interaction.user.id);
-    // console.log(util.inspect(balance));
     let selectedPlayerData = players[selection - 1];
     const playerId = Object.keys(selectedPlayerData)[0];
     players[selection - 1][playerId] += betAmount;
@@ -270,7 +272,6 @@ async function musmaGame(interaction) {
     });
     totalBetAmount += betAmount;
     totalBetAmountAfterFee = calcFee(totalBetAmount);
-    // console.log(`totalbet = ${totalBetAmount}`);
     await interaction.editReply(
       `티켓 구매자 : <@${interaction.user.id}>\n선택 : \`${selection}번 선수\` <@${playerId}>\n구매 금액 : ${betAmount} BTC\n티켓 구매 후 잔액 : ${balance.point.current} BTC`
     );
@@ -291,7 +292,6 @@ async function musmaGame(interaction) {
       msg += tmpMsg;
     }
     await interaction.followUp(msg);
-    // console.log(ticketBuyers);
   }
 
   //게임결과 입력
@@ -358,7 +358,7 @@ async function musmaGame(interaction) {
     console.log(`수수료 ${fee1}BTC가 ${receiver} 에게 입급되었습니다.`);
     console.log(`수수료 ${fee2}BTC가 ${receiver2} 에게 입급되었습니다.`);
     resetData();
-    console.log(`선수명단이 초기화 되었습니다.`);
+    console.log(`게임데이터가 초기화 되었습니다.`);
     await interaction.editReply(msg);
   }
 
