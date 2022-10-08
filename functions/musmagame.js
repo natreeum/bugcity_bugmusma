@@ -35,6 +35,9 @@ function resetData() {
   totalBetAmount = 0;
   ticketBuyers = [];
   mulRate = [];
+  for (let i of players) {
+    i.amount = 0;
+  }
 }
 
 function resetPlayerList() {
