@@ -1,5 +1,5 @@
-const util = require("node:util");
-const BankManager = require(`../bank/BankManager`);
+const util = require('node:util');
+const BankManager = require(`../bank/BankManagerNewApi`);
 const bankManager = new BankManager();
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=conditions-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 let canRegisterPlayer = true;
@@ -24,8 +24,8 @@ let ticketBuyers = [];
 let players = [];
 let mulRate = [];
 const admin = {
-  나트리움: "251349298300715008",
-  목조: "901812980944097300",
+  나트리움: '251349298300715008',
+  목조: '901812980944097300',
 };
 
 function resetData() {
@@ -51,7 +51,7 @@ function resetPlayerList() {
 /////////--------==-=-=-=-=-=-=-=-=-=-=-=-=-=-=function=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 async function musmaGame(interaction) {
   //선수등록
-  if (interaction.options.getSubcommand() === "선수등록") {
+  if (interaction.options.getSubcommand() === '선수등록') {
     //check ifAdmin
     if (!Object.values(admin).includes(interaction.user.id)) {
       await interaction.reply({
@@ -61,7 +61,7 @@ async function musmaGame(interaction) {
       return;
     }
     if (canRegisterPlayer) {
-      let playersMsg = "버그머스마 선수 등록이 완료되었습니다.\n\n";
+      let playersMsg = '버그머스마 선수 등록이 완료되었습니다.\n\n';
       for (let i = 1; i <= 8; i++) {
         let tmpPlayer = interaction.options.getUser(`no${i}`);
         if (tmpPlayer) {
@@ -82,7 +82,7 @@ async function musmaGame(interaction) {
   }
 
   //게임데이터 초기화
-  else if (interaction.options.getSubcommand() === "리셋") {
+  else if (interaction.options.getSubcommand() === '리셋') {
     //check ifAdmin
     if (!Object.values(admin).includes(interaction.user.id)) {
       await interaction.reply({
@@ -100,7 +100,7 @@ async function musmaGame(interaction) {
   }
 
   //선수명단 조회
-  else if (interaction.options.getSubcommand() === "선수명단") {
+  else if (interaction.options.getSubcommand() === '선수명단') {
     if (canRegisterPlayer) {
       await interaction.reply({
         content: `선수명단이 등록되지 않았습니다.`,
@@ -117,7 +117,7 @@ async function musmaGame(interaction) {
     let msg = `총 티켓 판매금액(수수료 제외) : \`${totalBetAmountAfterFee} BTC\`\n\n`;
     mulRate = [];
     for (let i of players) {
-      let tmpMsg = "";
+      let tmpMsg = '';
       //key : 선수 id
       let key = Object.keys(i)[0];
       //amount : 베팅금액
@@ -135,7 +135,7 @@ async function musmaGame(interaction) {
   }
 
   //ticket판매시작
-  else if (interaction.options.getSubcommand() === "판매시작") {
+  else if (interaction.options.getSubcommand() === '판매시작') {
     //check ifAdmin
     if (!Object.values(admin).includes(interaction.user.id)) {
       await interaction.reply({
@@ -158,7 +158,7 @@ async function musmaGame(interaction) {
       });
       return;
     }
-    let playerList = "";
+    let playerList = '';
     let playerNum = 1;
     for (let i of players) {
       let tmp = Object.keys(i);
@@ -171,7 +171,7 @@ async function musmaGame(interaction) {
   }
 
   //마권판매종료
-  else if (interaction.options.getSubcommand() === "판매종료") {
+  else if (interaction.options.getSubcommand() === '판매종료') {
     //check ifAdmin
     if (!Object.values(admin).includes(interaction.user.id)) {
       await interaction.reply({
@@ -191,7 +191,7 @@ async function musmaGame(interaction) {
 
     mulRate = [];
     for (let i of players) {
-      let tmpMsg = "";
+      let tmpMsg = '';
       //key : 선수 id
       let key = Object.keys(i)[0];
       //amount : 베팅금액
@@ -210,13 +210,13 @@ async function musmaGame(interaction) {
   }
 
   //티켓구매
-  else if (interaction.options.getSubcommand() === "구매") {
-    let selection = interaction.options.getInteger("선수번호");
-    const betAmount = interaction.options.getInteger("bet_amount");
+  else if (interaction.options.getSubcommand() === '구매') {
+    let selection = interaction.options.getInteger('선수번호');
+    const betAmount = interaction.options.getInteger('bet_amount');
     //canBuy Ticket check
     if (!canBuyTicket) {
       await interaction.reply({
-        content: "아직 티켓을 구매할 수 없습니다.",
+        content: '아직 티켓을 구매할 수 없습니다.',
         ephemeral: true,
       });
       return;
@@ -280,7 +280,7 @@ async function musmaGame(interaction) {
 
     mulRate = [];
     for (let i of players) {
-      let tmpMsg = "";
+      let tmpMsg = '';
       let key = Object.keys(i)[0];
       let amount = i[key] === 0 ? 1 : i[key];
       mulRate.push(Math.floor((totalBetAmountAfterFee / amount) * 100) / 100);
@@ -295,7 +295,7 @@ async function musmaGame(interaction) {
   }
 
   //게임결과 입력
-  else if (interaction.options.getSubcommand() === "결과입력") {
+  else if (interaction.options.getSubcommand() === '결과입력') {
     //check ifAdmin
     if (!Object.values(admin).includes(interaction.user.id)) {
       await interaction.reply({
@@ -319,7 +319,7 @@ async function musmaGame(interaction) {
     }
     await interaction.deferReply();
     // result logic
-    const winnerNum = interaction.options.getInteger("winner_num");
+    const winnerNum = interaction.options.getInteger('winner_num');
     const winnerIdx = winnerNum - 1;
     const winnerId = Object.keys(players[winnerIdx])[0];
     let msg = `이번 경기 승리자는 \`${winnerNum}번 선수\` <@${winnerId}> 입니다!🎉\n\n`;
@@ -327,12 +327,8 @@ async function musmaGame(interaction) {
     for (let i of ticketBuyers) {
       buyers.push(Object.keys(i)[0]);
     }
-    // console.log(`buyers : ${buyers}`);
-    // console.log(`ticketBuyers : ${util.inspect(ticketBuyers)}`);
     for (let i of buyers) {
-      // console.log(`i : ${i}`);
       for (let j of ticketBuyers) {
-        // console.log(`j : ${util.inspect(j)}`);
         if (Object.keys(j)[0] == String(i))
           if (Object.keys(j[String(i)])[0] === winnerId) {
             await bankManager.withdrawBTC(
@@ -363,7 +359,7 @@ async function musmaGame(interaction) {
   }
 
   //내 티켓 보기
-  else if (interaction.options.getSubcommand() === "내티켓") {
+  else if (interaction.options.getSubcommand() === '내티켓') {
     if (canRegisterPlayer) {
       await interaction.reply({
         content: `선수명단이 등록되지 않았습니다.`,
